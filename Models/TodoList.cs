@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace todo.Models
 {
     public class TodoList
     {
-        private List<TodoItem> Items { get; }
+        [XmlElement(Order = 1, ElementName = "Items")]
+        public List<TodoItem> Items { get; }
         
         public int Count => Items.Count;
 
