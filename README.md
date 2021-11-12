@@ -10,5 +10,5 @@ A handy terminal based to-do list application with GitHub issues integration
  - you can find details and in depth explanations at the [Wiki section](https://github.com/fybalaban/todo/wiki)
 
 ## Development
- - pure .net 5 on jetbrains rider
+ - pure .net 5 on jetbrains rider on linux
  - clone this repository either by using [github desktop](https://desktop.github.com/) or by using [github cli](https://cli.github.com/)
