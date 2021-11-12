@@ -1,16 +1,14 @@
 ﻿using System;
 using System.IO;
-using System.Text;
-using System.Text.Json;
 using System.Xml.Serialization;
 using todo.Models;
 
 namespace todo
 {
-    class Program
+    internal static class Program
     {
-        private static bool _isFirstRun = false;
-        private static TodoList _todoList = null;
+        private static bool _isFirstRun;
+        private static TodoList _todoList;
         
         private static void Main(string[] args)
         {
@@ -39,19 +37,19 @@ namespace todo
         private static void ListItems()
         {
             for (int i = 0; i < _todoList.Count; i++)
-                Console.WriteLine(_todoList[i].Completed ? "[x]" : "[ ]" + _todoList[i].Description);
+                Console.WriteLine(_todoList[i].Completed ? "[x] " : "[ ] " + _todoList[i].Description);
         }
 
         private static void ReadFile(string location)
         {
-            XmlSerializer deserializer = new XmlSerializer(typeof(TodoList));
+            XmlSerializer deserializer = new(typeof(TodoList));
             using FileStream fs = File.Open(location, FileMode.Open);
             _todoList = (TodoList) deserializer.Deserialize(fs);
         }
 
         private static void SaveFile(string location)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(TodoList));
+            XmlSerializer serializer = new(typeof(TodoList));
             using FileStream fs = File.Open(location, FileMode.OpenOrCreate);
             serializer.Serialize(fs, _todoList);
         }

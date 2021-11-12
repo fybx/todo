@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.Json;
-using System.Xml.Serialization;
 
 namespace todo.Models
 {
     public class TodoList
     {
-        public List<TodoItem> Items { get; }
+        private List<TodoItem> Items { get; }
         
         public int Count => Items.Count;
 
