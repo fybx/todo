@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Sockets;
 using System.Xml.Serialization;
 using todo.Models;
 
@@ -14,13 +15,18 @@ namespace todo
         {
             string todoFile = Path.Combine(AppContext.BaseDirectory, "todo.file");
             _isFirstRun = !File.Exists(todoFile);
-
             if (_isFirstRun)
                 CreateTodo(todoFile);
             else
                 ReadFile(todoFile);
-            
-            ListItems();
+
+            if (args.Length is 0) 
+                ListItems();
+            else if (args[0] is "add")
+                TryAdd(args);
+            else if (args[0] is "rm" && args.Length is 2)
+                TryRem(args);
+
 
             Console.WriteLine("Completed!");
         }
@@ -38,6 +44,16 @@ namespace todo
         {
             for (int i = 0; i < _todoList.Count; i++)
                 Console.WriteLine(_todoList[i].Completed ? "[x] " : "[ ] " + _todoList[i].Description);
+        }
+
+        private static void TryAdd(string[] args)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void TryRem(string[] args)
+        {
+            throw new NotImplementedException();
         }
 
         private static void ReadFile(string location)
