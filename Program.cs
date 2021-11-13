@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net.Sockets;
 using System.Text;
 using System.Xml.Serialization;
 using todo.Models;
@@ -30,6 +29,8 @@ namespace todo
                 TryRem(args);
             else if (args[0] is "do")
                 TryDo(args);
+            else
+                Console.WriteLine($"todo: '{args[0]}' is not a command!");
             
             Console.WriteLine("Completed!");
         }
@@ -68,7 +69,7 @@ namespace todo
             if (args.Length is 1)
                 Console.WriteLine(@"todo: subcommand 'rm' needs 'index' to remove item!");
             else if (args.Length > 2)
-                Console.WriteLine(@"todo: subcommand 'rm' doesn't take more than 1 arguments!");
+                Console.WriteLine(@"todo: subcommand 'rm' doesn't take more than 1 argument!");
             else if (int.TryParse(args[1], out int index))
             {
                 if (index < 0 || index >= _todoList.Count)
@@ -77,6 +78,7 @@ namespace todo
                 {
                     _todoList.EditItem(index, Operation.Remove);
                     SaveFile();
+                    Console.WriteLine($"todo: removed item at {index}");
                 }
             }
             else
