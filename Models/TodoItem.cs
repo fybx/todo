@@ -5,16 +5,13 @@ namespace todo.Models
 {
     public class TodoItem
     {
-        [XmlElement(Order = 1, ElementName = "Index")]
-        public int Index;
-        
-        [XmlElement(Order = 2, ElementName = "Creation")]
+        [XmlElement(Order = 1, ElementName = "Creation")]
         public DateTime Creation;
         
-        [XmlElement(Order = 3, ElementName = "Completed")]
+        [XmlElement(Order = 2, ElementName = "Completed")]
         public bool Completed;
         
-        [XmlElement(Order = 4, ElementName = "Description")]
+        [XmlElement(Order = 3, ElementName = "Description")]
         public string Description;
     }
 }

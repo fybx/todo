@@ -16,7 +16,7 @@ namespace todo.Models
 
         public TodoList() => Items = new List<TodoItem>();
 
-        public void AddItem(string description) => Items.Add(new TodoItem {Completed = false, Creation = DateTime.UtcNow, Description = description, Index = Count});
+        public void AddItem(string description) => Items.Add(new TodoItem {Completed = false, Creation = DateTime.UtcNow, Description = description});
 
         public void EditItem(int index, Operation operation, object parameter = null)
         {
