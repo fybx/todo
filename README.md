@@ -5,6 +5,7 @@ A handy terminal based to-do list application with GitHub issues integration
  - ```you@yourcomputer:~$ todo``` will bring you all the items you added previously
  - ```todo add buy doner kebab on way back home``` to remember the ***doner kebab***
  - ```todo rm 0``` to remove the first item on the list (don't say that arrays start at 1)
+ - ```todo do 0``` to mark the first item done
  - ```todo gh setup``` to set up GitHub integration to gather your open issues
  - and ```todo gh``` to see all open and assigned issues
  - you can find details and in depth explanations at the [Wiki section](https://github.com/fybalaban/todo/wiki)
