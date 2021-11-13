@@ -28,6 +28,8 @@ namespace todo
                 TryAdd(args);
             else if (args[0] is "rm")
                 TryRem(args);
+            else if (args[0] is "do")
+                TryDo(args);
             
             Console.WriteLine("Completed!");
         }
@@ -79,6 +81,27 @@ namespace todo
             }
             else
                 Console.WriteLine($"todo: subcommand 'rm' doesn't expect '{args[1]}' for argument 'index'!");
+        }
+
+        private static void TryDo(string[] args)
+        {
+            if (args.Length is 1)
+                Console.WriteLine(@"todo: subcommand 'do' needs 'index' to set item done!");
+            else if (args.Length > 2)
+                Console.WriteLine(@"todo: subcommand 'do' doesn't take more than 1 argument!");
+            else if (int.TryParse(args[1], out int index))
+            {
+                if (index <  0 || index >= _todoList.Count)
+                    Console.WriteLine($"todo: index was out of range, none set. your todo list currently holds {_todoList.Count} items.");
+                else
+                {
+                    _todoList.EditItem(index, Operation.ChangeDone, !_todoList[index].Completed);
+                    SaveFile();
+                    Console.WriteLine($"todo: set item at '{index}' " + (_todoList[index].Completed ? "done" : "undone"));
+                }
+            }
+            else
+                Console.WriteLine($"todo: subcommand 'do' doesn't expect '{args[1]}' for argument 'index'!");
         }
 
         private static void ReadFile()
