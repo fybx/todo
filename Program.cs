@@ -26,7 +26,7 @@ namespace todo
                 ListItems();
             else if (args[0] is "add")
                 TryAdd(args);
-            else if (args[0] is "rm" && args.Length is 2)
+            else if (args[0] is "rm")
                 TryRem(args);
             
             Console.WriteLine("Completed!");
@@ -62,20 +62,38 @@ namespace todo
 
         private static void TryRem(string[] args)
         {
-            throw new NotImplementedException();
+            // i didn't use switch case here because if-else takes less lines and is more readable
+            if (args.Length is 1)
+                Console.WriteLine(@"todo: subcommand 'rm' needs 'index' to remove item!");
+            else if (args.Length > 2)
+                Console.WriteLine(@"todo: subcommand 'rm' doesn't take more than 1 arguments!");
+            else if (int.TryParse(args[1], out int index))
+            {
+                if (index < 0 || index >= _todoList.Count)
+                    Console.WriteLine($"todo: index was out of range, none removed. your todo list currently holds {_todoList.Count} items.");
+                else
+                {
+                    _todoList.EditItem(index, Operation.Remove);
+                    SaveFile();
+                }
+            }
+            else
+                Console.WriteLine($"todo: subcommand 'rm' doesn't expect '{args[1]}' for argument 'index'!");
         }
 
         private static void ReadFile()
         {
             XmlSerializer deserializer = new(typeof(TodoList));
-            using FileStream fs = File.Open(_todoFile, FileMode.Open);
+            using FileStream fs = File.Open(_todoFile, FileMode.Open, FileAccess.Read);
             _todoList = (TodoList) deserializer.Deserialize(fs);
         }
 
         private static void SaveFile()
         {
+            if (File.Exists(_todoFile))
+                File.Delete(_todoFile);
             XmlSerializer serializer = new(typeof(TodoList));
-            using FileStream fs = File.Open(_todoFile, FileMode.OpenOrCreate);
+            using FileStream fs = File.Open(_todoFile, FileMode.CreateNew, FileAccess.Write);
             serializer.Serialize(fs, _todoList);
         }
     }
