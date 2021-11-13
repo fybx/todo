@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Text;
 using System.Xml.Serialization;
 using todo.Models;
 
@@ -10,15 +11,16 @@ namespace todo
     {
         private static bool _isFirstRun;
         private static TodoList _todoList;
+        private static string _todoFile;
         
         private static void Main(string[] args)
         {
-            string todoFile = Path.Combine(AppContext.BaseDirectory, "todo.file");
-            _isFirstRun = !File.Exists(todoFile);
+            _todoFile = Path.Combine(AppContext.BaseDirectory, "todo.file");
+            _isFirstRun = !File.Exists(_todoFile);
             if (_isFirstRun)
-                CreateTodo(todoFile);
+                CreateTodo();
             else
-                ReadFile(todoFile);
+                ReadFile();
 
             if (args.Length is 0) 
                 ListItems();
@@ -26,29 +28,36 @@ namespace todo
                 TryAdd(args);
             else if (args[0] is "rm" && args.Length is 2)
                 TryRem(args);
-
-
+            
             Console.WriteLine("Completed!");
         }
 
-        private static void CreateTodo(string location)
+        private static void CreateTodo()
         {
             _todoList = new TodoList();
             _todoList.AddItem("This is the initial item");
             _todoList.AddItem("This sentence is false");
             _todoList.EditItem(1, Operation.ChangeDone, true);
-            SaveFile(location);
+            SaveFile();
         }
 
         private static void ListItems()
         {
             for (int i = 0; i < _todoList.Count; i++)
-                Console.WriteLine(_todoList[i].Completed ? "[x] " : "[ ] " + _todoList[i].Description);
+                Console.WriteLine((_todoList[i].Completed ? "[x] " : "[ ] ") + _todoList[i].Description);
         }
 
         private static void TryAdd(string[] args)
         {
-            throw new NotImplementedException();
+            if (args.Length is 1)
+                Console.WriteLine(@"subcommand 'add' needs 'description' to add todo item!");
+            else
+            {
+                StringBuilder sb = new();
+                for (int i = 1; i < args.Length; i++) sb.AppendFormat(" {0} ", args[i]);
+                _todoList.AddItem(sb.ToString().Trim());
+                SaveFile();   
+            }
         }
 
         private static void TryRem(string[] args)
@@ -56,17 +65,17 @@ namespace todo
             throw new NotImplementedException();
         }
 
-        private static void ReadFile(string location)
+        private static void ReadFile()
         {
             XmlSerializer deserializer = new(typeof(TodoList));
-            using FileStream fs = File.Open(location, FileMode.Open);
+            using FileStream fs = File.Open(_todoFile, FileMode.Open);
             _todoList = (TodoList) deserializer.Deserialize(fs);
         }
 
-        private static void SaveFile(string location)
+        private static void SaveFile()
         {
             XmlSerializer serializer = new(typeof(TodoList));
-            using FileStream fs = File.Open(location, FileMode.OpenOrCreate);
+            using FileStream fs = File.Open(_todoFile, FileMode.OpenOrCreate);
             serializer.Serialize(fs, _todoList);
         }
     }
